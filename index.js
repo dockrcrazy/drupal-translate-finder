@@ -4,9 +4,9 @@ const fileFinder = require("find");
 const colors = require('colors/safe');
 const path = require('path');
 
-async function getFilesContainingTranslations() {
+async function getFilesContainingTranslations(path) {
     let filesContainingTrans = [];
-    let files = await find.findSync("(->t\\((\"|')(.)+)(\"|')\\)", process.argv[2]);
+    let files = await find.findSync("(->t\\((\"|')(.)+)(\"|')\\)", path);
     for (let found in files) {
         let trans = files[found];
         let transfile = {
@@ -21,9 +21,9 @@ async function getFilesContainingTranslations() {
     return filesContainingTrans;
 }
 
-function getPoFiles() {
+function getPoFiles(path) {
     return new Promise((resolve, reject) => {
-        fileFinder.file(/\.po$/, process.argv[2], function (files) {
+        fileFinder.file(/\.po$/, path, function (files) {
             let filePromises = [];
             for (let file of files) {
                 filePromises.push(new Promise((resolveLoad) => {
@@ -83,14 +83,6 @@ function scanTranslations(transFiles, poFiles) {
     });
 }
 
-async function main() {
-    let poFiles = await getPoFiles();
-    let transFiles = await getFilesContainingTranslations();
-    let translations = await scanTranslations(transFiles, poFiles);
-    echoResult(translations, poFiles);
-
-}
-
 function echoResult(translations, poFiles) {
 
     console.log(colors.blue('Po files found: '));
@@ -123,5 +115,16 @@ function echoResult(translations, poFiles) {
     }
 }
 
+async function main() {
+    let path = '/tmp/scannedDir';
+    if(typeof process.argv[2] !== 'undefined'){
+        path = process.argv[2];
+    }
+    let poFiles = await getPoFiles(path);
+    let transFiles = await getFilesContainingTranslations(path);
+    let translations = await scanTranslations(transFiles, poFiles);
+    echoResult(translations, poFiles);
+
+}
 main();
 

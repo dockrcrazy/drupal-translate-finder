@@ -1,12 +1,13 @@
 {
-  "name": "translate-finder",
+  "name": "drupal-translate-finder",
   "version": "1.0.0",
-  "description": "",
+  "description": "This tool aim to scan a directory and acquire all strings that have to be translated. Then it checks whether it is in a po file or not.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "repository": "https://github.com/dockrcrazy/drupal-translate-finder",
+  "author": "Dorian Boulch <dorian.boulch@trsb.net>",
   "license": "ISC",
   "dependencies": {
     "colors": "^1.3.2",
